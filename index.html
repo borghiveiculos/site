@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Borghi Veículos | Venda, Compra e Financiamento</title>
-    
+
     <link rel="icon" href="fav-icon.jpg" type="image/jpeg">
     <link rel="apple-touch-icon" href="fav-icon.jpg">
 
@@ -19,510 +19,910 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #f5f5f5;
-            --text-color: #1a1a1a;
-            --primary-color: #e60000; 
-            --secondary-bg: #c0c0c0; 
-            --dark-gray: #333333;
-            --black: #000000;
-            --card-bg: #ffffff;
-            --border-color: #cccccc;
+            color-scheme: light;
+            --bg: #f3f4f6;
+            --bg-accent: #e4e7ec;
+            --surface: rgba(255, 255, 255, 0.82);
+            --surface-strong: #ffffff;
+            --surface-soft: rgba(255, 255, 255, 0.62);
+            --text: #111827;
+            --muted: #4b5563;
+            --line: rgba(17, 24, 39, 0.1);
+            --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+            --primary: #cf111b;
+            --primary-strong: #9f0712;
+            --primary-soft: rgba(207, 17, 27, 0.1);
+            --black: #07090d;
+            --hero-overlay: linear-gradient(135deg, rgba(6, 8, 13, 0.94), rgba(18, 22, 34, 0.72));
+            --hero-grid: rgba(255, 255, 255, 0.06);
+            --wa: #25d366;
+            --wa-strong: #169a47;
         }
 
         body.dark-mode {
-            --bg-color: #121212;
-            --text-color: #f5f5f5;
-            --primary-color: #ff3333; 
-            --secondary-bg: #2a2a2a; 
-            --dark-gray: #1f1f1f;
-            --black: #000000;
-            --card-bg: #1e1e1e;
-            --border-color: #444444;
+            color-scheme: dark;
+            --bg: #090c12;
+            --bg-accent: #111723;
+            --surface: rgba(16, 20, 29, 0.88);
+            --surface-strong: #121825;
+            --surface-soft: rgba(16, 20, 29, 0.72);
+            --text: #f5f7fb;
+            --muted: #aab4c6;
+            --line: rgba(255, 255, 255, 0.1);
+            --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+            --primary: #ff4d57;
+            --primary-strong: #ff7a82;
+            --primary-soft: rgba(255, 77, 87, 0.14);
+            --black: #020409;
+            --hero-overlay: linear-gradient(135deg, rgba(2, 4, 9, 0.96), rgba(18, 25, 40, 0.82));
+            --hero-grid: rgba(255, 255, 255, 0.08);
+            --wa: #30e27a;
+            --wa-strong: #1fb260;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Rajdhani', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
         }
 
-        h1, h2, h3, h4, .services-tags, .btn-simulacao, .btn-whatsapp, .btn-gps {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: "Manrope", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(207, 17, 27, 0.08), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(7, 9, 13, 0.08), transparent 35%),
+                linear-gradient(180deg, var(--bg-accent), var(--bg));
+            color: var(--text);
             overflow-x: hidden;
+            transition: background-color 0.35s ease, color 0.35s ease;
         }
 
-        /* ANIMAÇÕES GERAIS DE ENTRADA */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 36px 36px;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: -1;
         }
 
-        /* Cabecalho */
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a,
+        button {
+            transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        h1, h2, h3, h4, .pill, .btn, .service-item strong {
+            font-family: "Space Grotesk", sans-serif;
+            letter-spacing: 0.02em;
+        }
+
+        .shell {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(32px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes drift {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes engineIdle {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate3d(0.6px, -0.4px, 0) rotate(-0.2deg);
+            }
+            50% {
+                transform: translate3d(-0.6px, 0.4px, 0) rotate(0.2deg);
+            }
+            75% {
+                transform: translate3d(0.5px, 0.2px, 0) rotate(-0.15deg);
+            }
+        }
+
         header {
-            background-color: var(--black);
-            color: white;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: center; 
-            align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 3px solid var(--primary-color);
-            box-shadow: 0 4px 15px rgba(230, 0, 0, 0.2);
+            backdrop-filter: blur(18px);
+            background: rgba(7, 9, 13, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
         }
 
-        /* Logo flutuante com brilho */
-        @keyframes glowLogo {
-            from { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2)); }
-            to { filter: drop-shadow(0 0 15px rgba(230, 0, 0, 0.8)); }
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .logo img {
-            max-height: 140px; 
-            animation: glowLogo 2s infinite alternate, float 4s ease-in-out infinite;
-        }
-
-        .logo img:hover {
-            transform: scale(1.1) rotate(4deg) !important; 
-        }
-
-        /* Botão de Tema (Sol e Lua) */
-        .theme-toggle {
-            position: absolute; 
-            right: 5%;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
+        .topbar {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 20px;
+            padding: 16px 0;
         }
 
-        .theme-toggle svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--bg-color);
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            min-width: 0;
+            text-align: center;
         }
 
-        /* HERO SECTION COM EFEITO DE FIBRA DE CARBONO REALISTA */
+        .brand img {
+            width: clamp(140px, 18vw, 188px);
+            filter: drop-shadow(0 0 18px rgba(255, 77, 87, 0.15));
+            animation: drift 4s ease-in-out infinite;
+        }
+
+        .brand:hover img,
+        .brand:focus-within img {
+            transform: translateY(-4px) scale(1.04);
+            filter:
+                drop-shadow(0 0 12px rgba(255, 255, 255, 0.28))
+                drop-shadow(0 0 28px rgba(255, 77, 87, 0.34));
+        }
+
+        .brand-copy {
+            color: #f8fafc;
+        }
+
+        .brand-copy p {
+            color: rgba(248, 250, 252, 0.72);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .brand-copy strong {
+            display: block;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            position: absolute;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            text-decoration: none;
+            font-size: 0.84rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            text-transform: uppercase;
+        }
+
+        .pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        .theme-toggle {
+            width: 56px;
+            height: 56px;
+            border: none;
+            border-radius: 16px;
+            background: transparent;
+            color: #f8fafc;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        .theme-toggle:hover,
+        .theme-toggle:focus-visible {
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .theme-toggle img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .theme-toggle:hover img,
+        .theme-toggle:focus-visible img {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
+        }
+
+        .flash-overlay {
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 0.7s ease-out;
+        }
+
+        .flash-overlay.active {
+            opacity: 1;
+        }
+
+        main {
+            padding: 28px 0 56px;
+        }
+
         .hero {
             position: relative;
-            padding: 80px 5%;
-            text-align: center;
-            color: white;
-            border-bottom: 2px solid var(--primary-color);
-            
-            /* Padrão CSS Avançado de Fibra de Carbono */
+            overflow: hidden;
+            border-radius: 36px;
+            padding: clamp(24px, 4vw, 46px);
             background:
-                linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
-                linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
-                linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
-                linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
-                linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
-                linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424 100%);
-            background-color: #131313;
-            background-size: 20px 20px;
+                var(--hero-overlay),
+                linear-gradient(90deg, var(--hero-grid) 1px, transparent 1px),
+                linear-gradient(var(--hero-grid) 1px, transparent 1px),
+                radial-gradient(circle at top, rgba(255, 77, 87, 0.18), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.2));
+            background-size: auto, 32px 32px, 32px 32px, auto, auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow);
+            color: #ffffff;
         }
 
-        /* Sombra interna para dar profundidade 3D na fibra de carbono */
         .hero::after {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle, transparent 20%, #000 130%);
+            inset: auto -80px -90px auto;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255, 77, 87, 0.36), transparent 72%);
+            filter: blur(8px);
             pointer-events: none;
-            z-index: 1;
         }
 
-        .hero > * {
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 28px;
+            align-items: center;
+            justify-items: center;
             position: relative;
-            z-index: 2; 
+            z-index: 1;
+            text-align: center;
         }
 
-        /* Frase com efeito branco e glow suave */
-        @keyframes textPulse {
-            from { text-shadow: 0 0 10px rgba(255,255,255,0.2), 2px 2px 4px rgba(0,0,0,0.8); }
-            to { text-shadow: 0 0 15px rgba(255,255,255,0.6), 0 0 25px rgba(255,255,255,0.4), 2px 2px 4px rgba(0,0,0,0.8); }
+        .hero-copy {
+            animation: fadeUp 0.8s ease both;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            color: #ffffff;
+            font-size: clamp(1.45rem, 3.1vw, 2.45rem);
+            line-height: 0.94;
             text-transform: uppercase;
-            animation: textPulse 3s infinite alternate, fadeInUp 0.8s ease-out both;
+            max-width: none;
+            white-space: nowrap;
+            margin-bottom: 12px;
         }
 
-        .services-tags {
-            margin-bottom: 40px;
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1rem;
-            text-transform: uppercase;
-            word-spacing: 5px;
-            animation: fadeInUp 0.8s ease-out 0.3s both;
+        .hero p {
+            max-width: 650px;
+            font-size: clamp(1.05rem, 2.4vw, 1.32rem);
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        .hero-buttons {
+        .services-row {
             display: flex;
-            gap: 20px;
-            justify-content: center;
             flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease-out 0.6s both;
+            gap: 12px;
+            margin: 26px 0 30px;
+            justify-content: center;
         }
 
-        /* ANIMAÇÃO DE PULSAÇÃO DOS BOTÕES (RADAR) */
-        @keyframes pulseRed {
-            0% { box-shadow: 0 0 0 0 rgba(230, 0, 0, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(230, 0, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(230, 0, 0, 0); }
+        .service-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            min-width: 140px;
         }
 
-        @keyframes pulseGreen {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        .service-item span {
+            font-size: 0.94rem;
+            color: rgba(255, 255, 255, 0.75);
         }
 
-        .btn-simulacao {
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 30px;
+            gap: 12px;
+            min-height: 54px;
+            padding: 14px 22px;
+            border-radius: 18px;
             text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 700;
             text-transform: uppercase;
-            transition: transform 0.2s, background-color 0.2s;
-            animation: pulseRed 2s infinite;
-        }
-
-        .btn-simulacao:hover {
-            transform: translateY(-3px) scale(1.05);
-            background-color: #cc0000;
-            animation: none; 
-        }
-
-        .btn-whatsapp {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px; 
-            background-color: #25D366; 
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.92rem;
             font-weight: 700;
-            text-transform: uppercase;
-            transition: transform 0.2s, background-color 0.2s;
-            animation: pulseGreen 2s infinite;
-            animation-delay: 1s; 
+            border: 1px solid transparent;
         }
 
-        .btn-whatsapp:hover {
-            transform: translateY(-3px) scale(1.05);
-            background-color: #1ebe5d;
-            animation: none;
+        .btn-primary {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+                0 0 18px rgba(255, 77, 87, 0.45),
+                0 18px 34px rgba(207, 17, 27, 0.28);
         }
 
-        .btn-whatsapp svg {
-            width: 24px;
-            height: 24px;
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.18) inset,
+                0 0 26px rgba(255, 77, 87, 0.6),
+                0 24px 38px rgba(207, 17, 27, 0.32);
+            outline: none;
+        }
+
+        .btn-secondary {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--wa), var(--wa-strong));
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+                0 0 18px rgba(48, 226, 122, 0.4),
+                0 18px 34px rgba(37, 211, 102, 0.24);
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus-visible {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.18) inset,
+                0 0 26px rgba(48, 226, 122, 0.54),
+                0 24px 38px rgba(37, 211, 102, 0.28);
+            outline: none;
+        }
+
+        .btn svg {
+            width: 22px;
+            height: 22px;
             fill: currentColor;
-            display: block;
             flex-shrink: 0;
         }
 
-        /* Vitrine do Instagram */
-        .instagram-feed {
-            padding: 40px 5%;
-            min-height: 500px;
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .highlight-card {
+            padding: 22px;
+            border-radius: 26px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+            animation: fadeUp 0.75s ease both;
+        }
+
+        .highlight-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .highlight-card:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+
+        .highlight-card strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+        }
+
+        .highlight-card p {
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.45;
+        }
+
+        .instagram-section {
+            margin-top: 24px;
+            padding: 26px;
+            border-radius: 32px;
+            background: linear-gradient(180deg, var(--surface), var(--surface-soft));
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+            animation: fadeUp 0.8s ease 0.24s both;
+        }
+
+        .section-head {
             display: flex;
-            justify-content: center;
-            animation: fadeInUp 1s ease-out 0.9s both;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .section-head h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            text-transform: uppercase;
+        }
+
+        .section-head p {
+            max-width: 520px;
+            color: var(--muted);
+            font-size: 1.02rem;
+        }
+
+        .instagram-shell {
+            min-height: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: var(--surface-strong);
         }
 
         .elfsight-app-41eca158-606a-412a-a819-21adff635203 {
             width: 100%;
-            max-width: 1200px;
         }
 
-        /* Rodapé */
-        footer {
-            background-color: var(--black);
-            color: var(--secondary-bg);
-            padding: 40px 5% 100px 5%; 
-            border-top: 4px solid var(--primary-color);
+        footer.site-footer {
+            margin: 26px auto 0;
+            padding: 32px;
+            border-radius: 34px;
+            background: linear-gradient(145deg, rgba(7, 9, 13, 0.96), rgba(16, 20, 29, 0.92));
+            color: #edf2f7;
+            box-shadow: 0 26px 60px rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
             position: relative;
         }
 
-        .footer-content {
+        footer.site-footer::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top right, rgba(255, 77, 87, 0.18), transparent 24%),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: auto, 28px 28px, 28px 28px;
+            pointer-events: none;
+        }
+
+        .footer-grid {
+            position: relative;
+            z-index: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 20; 
+            grid-template-columns: 1.1fr 1fr 1fr;
+            gap: 22px;
         }
 
-        .footer-col h4 {
-            color: white;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--primary-color);
-            display: inline-block;
-            padding-bottom: 5px;
+        .footer-card {
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-card h3,
+        .footer-card h4 {
+            margin-bottom: 14px;
             text-transform: uppercase;
         }
 
-        .footer-col p, .footer-col a {
-            color: #aaaaaa;
+        .footer-card p,
+        .footer-card a {
+            color: rgba(237, 242, 247, 0.78);
             text-decoration: none;
-            margin-bottom: 10px;
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-size: 1.05rem;
+            line-height: 1.45;
         }
 
-        .footer-col a:hover {
-            color: white;
+        .footer-card a:hover,
+        .footer-card a:focus-visible {
+            color: #ffffff;
+            outline: none;
         }
 
-        .contact-item {
-            display: flex;
+        .contact-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .contact-list a {
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .contact-item svg {
+        .contact-list svg {
             width: 18px;
             height: 18px;
             fill: currentColor;
             flex-shrink: 0;
         }
 
-        .map-container {
-            width: 100%;
-            height: 100px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #444;
-            opacity: 0.6; 
-            transition: opacity 0.3s ease;
-        }
-        
-        .map-container:hover {
-            opacity: 1; 
+        .footer-note {
+            margin-top: 14px;
+            display: inline-flex;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 77, 87, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 77, 87, 0.2);
+            font-size: 0.95rem;
+            font-weight: 700;
         }
 
-        .map-container iframe {
+        .map-wrap {
+            margin-top: 18px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            min-height: 180px;
+        }
+
+        .map-wrap iframe {
             width: 100%;
             height: 100%;
-            border: none;
+            min-height: 180px;
+            border: 0;
         }
 
-        .btn-gps {
-            display: inline-block !important; 
-            background-color: var(--primary-color);
-            color: white !important;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: background-color 0.2s, transform 0.2s;
-            text-align: center;
+        .btn-map {
+            margin-top: 16px;
+            width: fit-content;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+            box-shadow: 0 16px 30px rgba(207, 17, 27, 0.26);
         }
 
-        .btn-gps:hover {
-            background-color: #cc0000;
+        .btn-map:hover,
+        .btn-map:focus-visible {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(230, 0, 0, 0.3);
+            outline: none;
         }
 
-        /* Imagem do Carro no Rodapé (Estático com Brilho no Hover) */
-        .car-footer {
-            position: absolute;
-            bottom: 15px;
-            left: 5%; 
-            max-width: 170px; 
-            opacity: 0.9;
-            z-index: 10;
-            transition: filter 0.4s ease, transform 0.4s ease;
-        }
-
-        /* Animação apenas quando passa o mouse (Efeito de Brilho) */
-        .car-footer:hover {
-            transform: scale(1.02); 
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7)); 
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #b3b3b3; 
+        .footer-bottom {
             position: relative;
-            z-index: 20;
+            z-index: 1;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 26px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .signature {
-            font-size: 0.8rem;
-            color: #b3b3b3; 
-            margin-top: 8px;
-            font-family: 'Segoe UI', sans-serif;
+        .footer-bottom p {
+            color: rgba(237, 242, 247, 0.72);
+            font-size: 1rem;
         }
 
-        @media (max-width: 768px) {
-            .logo img { max-height: 100px; } 
-            .hero h1 { font-size: 1.8rem; }
-            .hero-buttons { flex-direction: column; gap: 15px; }
-            footer { padding-bottom: 40px; }
-            .car-footer { 
-                position: relative; 
-                display: block; 
-                margin: 20px auto 0 auto; 
-                left: auto; 
-                bottom: auto;
-                max-width: 150px;
+        .footer-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+        }
+
+        .footer-car {
+            width: min(240px, 40vw);
+            opacity: 0.96;
+            filter: drop-shadow(0 16px 18px rgba(0, 0, 0, 0.45));
+        }
+
+        .footer-car-link {
+            display: inline-flex;
+            text-decoration: none;
+        }
+
+        .footer-car-link:hover .footer-car,
+        .footer-car-link:focus-visible .footer-car {
+            animation: engineIdle 0.16s infinite;
+        }
+
+        .footer-car-link:focus-visible {
+            outline: none;
+        }
+
+        @media (max-width: 980px) {
+            .footer-grid,
+            .highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .section-head,
+            .footer-bottom {
+                align-items: start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .shell {
+                width: min(100% - 20px, 1180px);
+            }
+
+            .topbar {
+                padding: 12px 0;
+            }
+
+            .brand-copy {
+                display: none;
+            }
+
+            .header-actions .pill {
+                display: none;
+            }
+
+            .hero,
+            .instagram-section,
+            footer.site-footer {
+                border-radius: 26px;
+            }
+
+            .hero {
+                padding: 26px;
+            }
+
+            .cta-row {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .hero h1 {
+                white-space: normal;
+            }
+
+            .header-actions {
+                right: 0;
+            }
+
+            footer.site-footer {
+                padding: 22px;
             }
         }
     </style>
 </head>
 <body>
-
+    <div class="flash-overlay" id="flash-overlay" aria-hidden="true"></div>
     <header>
-        <div class="logo">
-            <img src="logo-BV.png" alt="Borghi Veículos Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/250x120?text=Borghi+Veiculos';">
+        <div class="shell topbar">
+            <div class="brand">
+                <img src="logo-BV.png" alt="Borghi Veículos Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/250x120?text=Borghi+Veiculos';">
+            </div>
+
+            <div class="header-actions">
+                <button class="theme-toggle" id="theme-btn" aria-label="Ativar modo noturno" aria-pressed="false" type="button">
+                    <img id="theme-icon" src="bang.png" alt="" aria-hidden="true">
+                </button>
+            </div>
         </div>
-        
-        <button class="theme-toggle" id="theme-btn" aria-label="Alternar Tema">
-            <svg id="theme-icon" viewBox="0 0 24 24">
-                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>
-            </svg>
-        </button>
     </header>
 
-    <section class="hero">
-        <h1>O Seu Novo Veículo Está Aqui</h1>
-        <p class="services-tags">Venda | Troca | Compra | Consigna | Financia</p>
-        
-        <div class="hero-buttons">
-            <a href="https://wa.me/5517997017323?text=Olá, gostaria de fazer uma simulação de veículo." target="_blank" class="btn-simulacao">
-                Faça sua Simulação
-            </a>
-            
-            <a href="https://wa.me/5517997017323?text=Olá, vim pelo site e gostaria de um atendimento." target="_blank" class="btn-whatsapp">
-                <svg viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-                </svg>
-                WhatsApp
-            </a>
-        </div>
-    </section>
+    <main class="shell">
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <h1>O seu novo veículo está aqui</h1>
+                    <div class="services-row" aria-label="Serviços oferecidos">
+                        <div class="service-item">
+                            <strong>Venda</strong>
+                            <span>ofertas selecionadas</span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Troca</strong>
+                            <span>avaliação transparente</span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Consignação</strong>
+                            <span>mais visibilidade</span>
+                        </div>
+                        <div class="service-item">
+                            <strong>Financia</strong>
+                            <span>simulação rápida</span>
+                        </div>
+                    </div>
 
-    <section class="instagram-feed">
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-41eca158-606a-412a-a819-21adff635203" data-elfsight-app-lazy></div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>Borghi Veículos</h4>
-                <p><strong>CNPJ:</strong> 60.233.480/0001-62</p>
-            </div>
-            <div class="footer-col">
-                <h4>Contato</h4>
-                <p class="contact-item">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                    </svg>
-                    <a href="https://wa.me/5517997017323" target="_blank">WhatsApp: 17 99701-7323</a>
-                </p>
-                <p class="contact-item">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                    </svg>
-                    <a href="https://instagram.com/borghiveiculos" target="_blank">Instagram: @borghiveiculos</a>
-                </p>
-            </div>
-            <div class="footer-col">
-                <h4>Endereço</h4>
-                <p>Rua do Comércio, 120</p>
-                <p>Nova Aliança, Brazil - 15210-000</p>
-                
-                <div class="map-container">
-                    <iframe src="https://maps.google.com/maps?q=Rua%20do%20Com%C3%A9rcio,%20120,%20Nova%20Alian%C3%A7a,%20Brasil&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="cta-row">
+                        <a href="https://wa.me/5517997017323?text=Olá, gostaria de fazer uma simulação de veículo." target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                            Faça sua simulação
+                        </a>
+                        <a href="https://wa.me/5517997017323?text=Olá, vim pelo site e gostaria de um atendimento." target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+                            </svg>
+                            WhatsApp
+                        </a>
+                    </div>
                 </div>
-                <a href="https://maps.google.com/?q=Rua+do+Comercio,+120,+Nova+Alianca,+SP,+Brasil" target="_blank" class="btn-gps">Abrir GPS</a>
-            </div>
-        </div>
-        
-        <img src="gol.png" alt="Gol" class="car-footer" onerror="this.onerror=null; this.style.display='none';">
 
-        <div class="copyright">
-            <p>© 2026 Borghi Veículos. Todos os direitos reservados.</p>
-            <p class="signature">Petrus Borghi</p>
-        </div>
-    </footer>
+            </div>
+        </section>
+
+        <section class="instagram-section">
+            <div class="section-head">
+                <div>
+                </div>
+            </div>
+
+            <div class="instagram-shell">
+                <script src="https://elfsightcdn.com/platform.js" async></script>
+                <div class="elfsight-app-41eca158-606a-412a-a819-21adff635203" data-elfsight-app-lazy></div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <section class="footer-card">
+                    <h3>Borghi Veículos</h3>
+                    <span class="footer-note">CNPJ: 60.233.480/0001-62</span>
+                </section>
+
+                <section class="footer-card">
+                    <h4>Contato</h4>
+                    <div class="contact-list">
+                        <a href="https://wa.me/5517997017323" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            WhatsApp: 17 99701-7323
+                        </a>
+                        <a href="https://instagram.com/borghiveiculos" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                            </svg>
+                            Instagram: @borghiveiculos
+                        </a>
+                    </div>
+                </section>
+
+                <section class="footer-card">
+                    <h4>Endereço</h4>
+                    <p>Rua do Comércio, 120</p>
+                    <p>Nova Aliança, Brazil - 15210-000</p>
+
+                    <div class="map-wrap">
+                        <iframe src="https://maps.google.com/maps?q=Rua%20do%20Com%C3%A9rcio,%20120,%20Nova%20Alian%C3%A7a,%20Brasil&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+
+                    <a href="https://maps.google.com/?q=Rua+do+Comercio,+120,+Nova+Alianca,+SP,+Brasil" target="_blank" rel="noopener noreferrer" class="btn btn-map">
+                        Abrir GPS
+                    </a>
+                </section>
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    <p class="footer-meta">© 2026 Borghi Veículos. Todos os direitos reservados. <span>Petrus Borghi</span></p>
+                </div>
+                <a href="game.html" class="footer-car-link" aria-label="Abrir jogo Gol Corrida">
+                    <img src="gol.png" alt="Gol" class="footer-car" onerror="this.onerror=null; this.style.display='none';">
+                </a>
+            </div>
+        </footer>
+    </main>
 
     <script>
-        const themeBtn = document.getElementById('theme-btn');
-        const themeIcon = document.getElementById('theme-icon');
+        const themeBtn = document.getElementById("theme-btn");
+        const themeIcon = document.getElementById("theme-icon");
+        const flashOverlay = document.getElementById("flash-overlay");
         const body = document.body;
+        const storageKey = "borghi-theme";
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const flashAudio = new Audio("cs-go-flashbang.mp3");
 
-        const sunIcon = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>';
-        const moonIcon = '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>';
+        const lightModeIcon = "explosion.png";
+        const darkModeIcon = "bang.png";
 
-        const savedTheme = localStorage.getItem('borghi-theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark-mode');
-            themeIcon.innerHTML = sunIcon; 
-            themeIcon.style.fill = '#f5f5f5';
-        } else {
-            themeIcon.innerHTML = moonIcon; 
-            themeIcon.style.fill = '#f5f5f5';
+        function applyTheme(theme, persist = true) {
+            const isDark = theme === "dark";
+            body.classList.toggle("dark-mode", isDark);
+            themeIcon.src = isDark ? darkModeIcon : lightModeIcon;
+            themeBtn.setAttribute("aria-label", isDark ? "Ativar modo claro" : "Ativar modo noturno");
+            themeBtn.setAttribute("aria-pressed", String(isDark));
+
+            if (persist) {
+                localStorage.setItem(storageKey, theme);
+            }
         }
 
-        themeBtn.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                themeIcon.innerHTML = sunIcon;
-                localStorage.setItem('borghi-theme', 'dark');
-            } else {
-                themeIcon.innerHTML = moonIcon;
-                localStorage.setItem('borghi-theme', 'light');
+        const savedTheme = localStorage.getItem(storageKey);
+        if (savedTheme === "light" || savedTheme === "dark") {
+            applyTheme(savedTheme, false);
+        } else {
+            applyTheme(mediaQuery.matches ? "dark" : "light", false);
+        }
+
+        themeBtn.addEventListener("click", () => {
+            const isCurrentlyDark = body.classList.contains("dark-mode");
+            const nextTheme = body.classList.contains("dark-mode") ? "light" : "dark";
+            applyTheme(nextTheme);
+
+            if (isCurrentlyDark && nextTheme === "light") {
+                flashOverlay.classList.add("active");
+
+                try {
+                    flashAudio.currentTime = 0;
+                    flashAudio.play();
+                } catch (error) {
+                    console.warn("Nao foi possivel reproduzir o audio da flashbang.", error);
+                }
+
+                window.setTimeout(() => {
+                    flashOverlay.classList.remove("active");
+                }, 2000);
+            }
+        });
+
+        mediaQuery.addEventListener("change", (event) => {
+            if (!localStorage.getItem(storageKey)) {
+                applyTheme(event.matches ? "dark" : "light", false);
             }
         });
     </script>
