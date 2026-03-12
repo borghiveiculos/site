@@ -66,9 +66,7 @@
             margin-bottom: 18px;
         }
 
-        .back-link,
-        .hud-chip,
-        .control-btn {
+        .back-link {
             border: 1px solid var(--line);
             background: var(--panel-soft);
             color: var(--text);
@@ -98,40 +96,6 @@
             letter-spacing: 0.04em;
         }
 
-        .title-wrap p {
-            color: var(--muted);
-            margin-top: 4px;
-            font-size: 0.98rem;
-        }
-
-        .hud {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-
-        .hud-chip {
-            border-radius: 20px;
-            padding: 14px 16px;
-            box-shadow: 0 18px 28px rgba(0, 0, 0, 0.2);
-        }
-
-        .hud-chip span {
-            display: block;
-            color: var(--muted);
-            font-size: 0.82rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .hud-chip strong {
-            display: block;
-            margin-top: 6px;
-            font-family: "Space Grotesk", sans-serif;
-            font-size: clamp(1.15rem, 2vw, 1.55rem);
-        }
-
         .game-card {
             border: 1px solid var(--line);
             border-radius: 28px;
@@ -156,6 +120,103 @@
             display: block;
             border-radius: 22px;
             touch-action: none;
+        }
+
+        .game-hud {
+            display: flex;
+            align-items: start;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .hud-stack {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hud-box,
+        .fullscreen-btn {
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(7, 10, 16, 0.62);
+            color: #f8fafc;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .hud-box {
+            min-width: 120px;
+            padding: 10px 12px;
+            border-radius: 18px;
+            pointer-events: auto;
+        }
+
+        .hud-box span {
+            display: block;
+            color: rgba(248, 250, 252, 0.66);
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .hud-box strong {
+            display: block;
+            margin-top: 4px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1rem;
+        }
+
+        .hud-box {
+            min-width: 116px;
+            padding: 10px 12px;
+            border-radius: 18px;
+        }
+
+        .hud-box span {
+            display: block;
+            color: rgba(248, 250, 252, 0.66);
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .hud-box strong {
+            display: block;
+            margin-top: 4px;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1rem;
+        }
+
+        .speedometer {
+            min-width: 132px;
+        }
+
+        .speedometer strong {
+            font-size: 1.32rem;
+        }
+
+        .level-sign {
+            min-width: 160px;
+        }
+
+        .fullscreen-btn {
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .fullscreen-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
         }
 
         .overlay {
@@ -220,21 +281,6 @@
             <div style="width:120px"></div>
         </div>
 
-        <section class="hud">
-            <div class="hud-chip">
-                <span>Pontos</span>
-                <strong id="score">0</strong>
-            </div>
-            <div class="hud-chip">
-                <span>Ultrapassagens</span>
-                <strong id="passes">0</strong>
-            </div>
-            <div class="hud-chip">
-                <span>Velocidade</span>
-                <strong id="speed">120 km/h</strong>
-            </div>
-        </section>
-
         <section class="game-card">
                 <canvas id="gameCanvas" width="1280" height="1024" aria-label="Jogo Gol do Petrus"></canvas>
                 <div class="overlay" id="overlay">
@@ -244,6 +290,31 @@
                         <p>Desvie dos carros, ultrapasse o transito e acelere cada vez mais.</p>
                         <button class="start-btn" id="startButton" type="button">Iniciar corrida</button>
                     </div>
+                </div>
+                <div class="game-hud">
+                    <div class="hud-stack">
+                        <div class="hud-box speedometer">
+                            <span>Velocidade</span>
+                            <strong id="speed">0 km/h</strong>
+                        </div>
+                        <div class="hud-box">
+                            <span>Kilometragem</span>
+                            <strong id="score">0 km</strong>
+                        </div>
+                        <div class="hud-box">
+                            <span>Ultrapassagens</span>
+                            <strong id="passes">0 carros</strong>
+                        </div>
+                        <div class="hud-box level-sign">
+                            <span>Destino</span>
+                            <strong id="level-city">Nova Alianca</strong>
+                        </div>
+                    </div>
+                    <button class="fullscreen-btn" id="fullscreen-btn" type="button" aria-label="Colocar jogo em tela cheia">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 3H3v4h2V5h2V3zm12 0h-4v2h2v2h2V3zM5 15H3v6h6v-2H5v-4zm16 0h-2v4h-4v2h6v-6z"/>
+                        </svg>
+                    </button>
                 </div>
         </section>
 
@@ -257,9 +328,30 @@
         const scoreEl = document.getElementById("score");
         const passesEl = document.getElementById("passes");
         const speedEl = document.getElementById("speed");
+        const fullscreenBtn = document.getElementById("fullscreen-btn");
+        const levelCityEl = document.getElementById("level-city");
 
         const playerImage = new Image();
         playerImage.src = "gol-traseira.png";
+
+        const obstacleCarFiles = [
+            "320i.png",
+            "palio.png",
+            "amarok.png",
+            "civic.png",
+            "passat.png",
+            "astra.png",
+            "jetta.png"
+        ];
+
+        const obstacleCarImages = obstacleCarFiles.map((src) => {
+            const image = new Image();
+            image.src = src;
+            return { src, image };
+        });
+
+        const potholeImage = new Image();
+        potholeImage.src = "buraco.png";
 
         const world = {
             running: false,
@@ -298,6 +390,16 @@
 
         const obstacles = [];
         const lanePositions = [0.29, 0.5, 0.71];
+        const levels = [
+            { city: "Nova Alianca", label: "Nivel 1", min: 0, max: 10 },
+            { city: "Bady Bassitt", label: "Nivel 2", min: 11, max: 20 },
+            { city: "Rio Preto", label: "Nivel 3", min: 21, max: 30 },
+            { city: "Orindiuva", label: "Nivel 4", min: 31, max: 40 },
+            { city: "Sao Paulo", label: "Nivel 5", min: 41, max: 50 },
+            { city: "Rio de Janeiro", label: "Nivel 6", min: 51, max: 60 },
+            { city: "Bahia", label: "Nivel 7", min: 61, max: 70 },
+            { city: "Borghi Veiculos", label: "Nivel 8", min: 71, max: Infinity }
+        ];
 
         function resetGame() {
             world.running = true;
@@ -339,14 +441,17 @@
         }
 
         function updateHud() {
-            scoreEl.textContent = Math.floor(world.score);
-            passesEl.textContent = world.passes;
-            speedEl.textContent = `${Math.round(getSpeed() * 12)} km/h`;
+            const speed = Math.round(getSpeed() * 12);
+            const level = levels.find((item) => world.passes >= item.min && world.passes <= item.max) || levels[levels.length - 1];
+
+            scoreEl.textContent = `${Math.floor(world.score)} km`;
+            passesEl.textContent = `${world.passes} carros`;
+            speedEl.textContent = `${speed} km/h`;
+            levelCityEl.textContent = level.city;
         }
 
         function spawnObstacle() {
             const lane = Math.floor(Math.random() * lanePositions.length);
-            const colors = ["#ffce4f", "#4fd1ff", "#ff6d6d", "#ffffff", "#8f7dff"];
             const type = Math.random() < 0.28 ? "pothole" : "car";
 
             if (type === "pothole") {
@@ -355,23 +460,26 @@
                     lane,
                     x: lanePositions[lane],
                     y: 0.12,
-                    width: 116 + Math.random() * 18,
-                    height: 58 + Math.random() * 12,
+                    width: 130 + Math.random() * 22,
+                    height: 68 + Math.random() * 14,
                     speedFactor: 0.88 + Math.random() * 0.22,
+                    image: potholeImage,
                     passed: false
                 });
                 return;
             }
+
+            const vehicleSprite = obstacleCarImages[Math.floor(Math.random() * obstacleCarImages.length)];
 
             obstacles.push({
                 type,
                 lane,
                 x: lanePositions[lane],
                 y: 0.1,
-                width: 112 + Math.random() * 14,
-                height: 164 + Math.random() * 18,
-                color: colors[(world.enemySeed++) % colors.length],
+                width: 128 + Math.random() * 18,
+                height: 186 + Math.random() * 20,
                 speedFactor: 0.72 + Math.random() * 0.36,
+                image: vehicleSprite.image,
                 passed: false
             });
         }
@@ -497,8 +605,15 @@
             const x = projectX(obstacle.x, obstacle.y) - w / 2;
             const y = canvas.height * obstacle.y;
 
+            if (obstacle.image && obstacle.image.complete && obstacle.image.naturalWidth > 0) {
+                ctx.save();
+                ctx.drawImage(obstacle.image, x, y, w, h);
+                ctx.restore();
+                return;
+            }
+
             ctx.save();
-            ctx.fillStyle = obstacle.color;
+            ctx.fillStyle = "#cbd5e1";
             roundRect(ctx, x, y, w, h, 16 * scale);
             ctx.fill();
 
@@ -530,6 +645,13 @@
             const h = obstacle.height * scale;
             const x = projectX(obstacle.x, obstacle.y) - w / 2;
             const y = canvas.height * obstacle.y;
+
+            if (obstacle.image && obstacle.image.complete && obstacle.image.naturalWidth > 0) {
+                ctx.save();
+                ctx.drawImage(obstacle.image, x, y, w, h);
+                ctx.restore();
+                return;
+            }
 
             ctx.save();
             ctx.fillStyle = "rgba(26, 18, 16, 0.85)";
@@ -710,6 +832,15 @@
             overlay.querySelector("p").textContent = "Desvie dos carros, ultrapasse o transito e acelere cada vez mais.";
             startButton.textContent = "Reiniciar corrida";
             resetGame();
+        });
+
+        fullscreenBtn.addEventListener("click", async () => {
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+                return;
+            }
+
+            await document.querySelector(".game-card").requestFullscreen();
         });
 
         playerImage.addEventListener("load", render);
