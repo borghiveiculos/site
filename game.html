@@ -7,7 +7,7 @@
     <link rel="icon" href="fav-icon.jpg" type="image/jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Orbitron:wght@700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #06080d;
@@ -90,10 +90,15 @@
         }
 
         .title-wrap h1 {
-            font-family: "Space Grotesk", sans-serif;
+            font-family: "Orbitron", "Space Grotesk", sans-serif;
             font-size: clamp(1.55rem, 4vw, 2.3rem);
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.34),
+                0 0 18px rgba(224, 25, 39, 0.42),
+                0 0 32px rgba(224, 25, 39, 0.26);
         }
 
         .game-card {
@@ -130,7 +135,7 @@
         .touch-controls {
             display: none;
             justify-content: center;
-            gap: 14px;
+            gap: 54px;
             margin-top: 14px;
         }
 
@@ -194,16 +199,16 @@
         .hud-box span {
             display: block;
             color: rgba(248, 250, 252, 0.66);
-            font-size: 0.66rem;
+            font-size: 0.92rem;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.06em;
         }
 
         .hud-box strong {
             display: block;
             margin-top: 4px;
             font-family: "Space Grotesk", sans-serif;
-            font-size: 1rem;
+            font-size: 0.92rem;
         }
 
         .hud-box {
@@ -214,24 +219,20 @@
         .hud-box span {
             display: block;
             color: rgba(248, 250, 252, 0.66);
-            font-size: 0.66rem;
+            font-size: 0.92rem;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.06em;
         }
 
         .hud-box strong {
             display: block;
             margin-top: 4px;
             font-family: "Space Grotesk", sans-serif;
-            font-size: 1rem;
+            font-size: 0.92rem;
         }
 
         .speedometer {
             min-width: 132px;
-        }
-
-        .speedometer strong {
-            font-size: 1.32rem;
         }
 
         .level-sign {
@@ -291,11 +292,13 @@
             }
 
             .fullscreen-btn {
-                align-self: center;
+                display: none;
             }
 
             .touch-controls {
                 display: flex;
+                gap: 78px;
+                margin-top: 16px;
             }
         }
 
@@ -324,10 +327,15 @@
         }
 
         .overlay-box h2 {
-            font-family: "Space Grotesk", sans-serif;
+            font-family: "Orbitron", "Space Grotesk", sans-serif;
             text-transform: uppercase;
             font-size: clamp(1.5rem, 3vw, 2rem);
             margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.28),
+                0 0 18px rgba(224, 25, 39, 0.36),
+                0 0 26px rgba(224, 25, 39, 0.22);
         }
 
         .cover-car {
@@ -361,21 +369,38 @@
                 padding: 14px 10px;
             }
 
+            .cover-car {
+                width: min(152px, 42vw);
+                margin-bottom: 12px;
+            }
+
             .overlay-box h2 {
-                font-size: clamp(1.2rem, 6vw, 1.6rem);
+                font-size: clamp(1.05rem, 5vw, 1.35rem);
+                margin-bottom: 6px;
             }
 
             .overlay-box p {
-                font-size: 0.94rem;
+                font-size: 0.82rem;
+                line-height: 1.35;
+                margin-bottom: 12px;
             }
 
             .overlay-box {
-                max-width: min(100%, 360px);
+                max-width: min(100%, 300px);
                 padding: 0;
             }
 
             .start-btn {
                 width: 100%;
+                min-height: 46px;
+                padding: 12px 16px;
+                font-size: 0.92rem;
+            }
+
+            .touch-btn {
+                min-width: 108px;
+                min-height: 64px;
+                font-size: 1.7rem;
             }
         }
 
@@ -405,13 +430,13 @@
                 </div>
                 <div class="game-hud">
                     <div class="hud-stack">
-                        <div class="hud-box speedometer">
-                            <span>Velocidade</span>
-                            <strong id="speed">0 km/h</strong>
-                        </div>
                         <div class="hud-box">
                             <span>Kilometragem</span>
                             <strong id="score">0 km</strong>
+                        </div>
+                        <div class="hud-box speedometer">
+                            <span>Velocidade</span>
+                            <strong id="speed">0 km/h</strong>
                         </div>
                         <div class="hud-box">
                             <span>Ultrapassagens</span>
@@ -487,6 +512,19 @@
             { x: 180, y: 96, scale: 1.2, speed: 14, alpha: 0.46 },
             { x: 760, y: 78, scale: 1.55, speed: 10, alpha: 0.4 },
             { x: 1160, y: 132, scale: 0.95, speed: 18, alpha: 0.34 }
+        ];
+        const stars = [
+            { x: 0.08, y: 0.09, size: 1.8, twinkle: 0.4 },
+            { x: 0.15, y: 0.18, size: 2.2, twinkle: 1.2 },
+            { x: 0.22, y: 0.07, size: 1.6, twinkle: 2.1 },
+            { x: 0.31, y: 0.16, size: 2.4, twinkle: 0.8 },
+            { x: 0.42, y: 0.1, size: 1.9, twinkle: 1.7 },
+            { x: 0.5, y: 0.2, size: 1.5, twinkle: 2.6 },
+            { x: 0.59, y: 0.06, size: 2.2, twinkle: 1.4 },
+            { x: 0.68, y: 0.15, size: 1.7, twinkle: 0.9 },
+            { x: 0.77, y: 0.08, size: 2.5, twinkle: 2.4 },
+            { x: 0.86, y: 0.17, size: 1.8, twinkle: 1.1 },
+            { x: 0.93, y: 0.11, size: 2.1, twinkle: 2.9 }
         ];
 
         const input = {
@@ -639,11 +677,55 @@
             input[action] = active;
         }
 
+        function mixNumber(start, end, amount) {
+            return start + (end - start) * amount;
+        }
+
+        function mixColor(from, to, amount) {
+            return `rgb(${Math.round(mixNumber(from[0], to[0], amount))}, ${Math.round(mixNumber(from[1], to[1], amount))}, ${Math.round(mixNumber(from[2], to[2], amount))})`;
+        }
+
         function getSkyPalette() {
-            const cycle = (Math.sin(world.time * 0.08) + 1) / 2;
-            const top = `rgb(${Math.round(32 + cycle * 90)}, ${Math.round(68 + cycle * 92)}, ${Math.round(130 + cycle * 70)})`;
-            const bottom = `rgb(${Math.round(235 - cycle * 90)}, ${Math.round(145 + cycle * 50)}, ${Math.round(120 + cycle * 80)})`;
-            return { top, bottom, cycle };
+            const progress = Math.max(0, Math.min(1, world.passes / 80));
+            const morningTop = [92, 170, 245];
+            const morningBottom = [198, 228, 255];
+            const afternoonTop = [255, 148, 104];
+            const afternoonBottom = [255, 210, 150];
+            const nightTop = [14, 22, 58];
+            const nightBottom = [38, 66, 126];
+            let top;
+            let bottom;
+
+            if (progress < 0.45) {
+                const phase = progress / 0.45;
+                top = mixColor(morningTop, afternoonTop, phase);
+                bottom = mixColor(morningBottom, afternoonBottom, phase);
+            } else {
+                const phase = (progress - 0.45) / 0.55;
+                top = mixColor(afternoonTop, nightTop, phase);
+                bottom = mixColor(afternoonBottom, nightBottom, phase);
+            }
+
+            const sunStrength = Math.max(0, 1 - progress * 1.35);
+            const sunsetStrength = progress < 0.7 ? Math.max(0, 1 - Math.abs(progress - 0.45) / 0.25) : 0;
+            const starOpacity = Math.max(0, (progress - 0.58) / 0.42);
+
+            return { top, bottom, progress, sunStrength, sunsetStrength, starOpacity };
+        }
+
+        function drawStars(sky) {
+            if (sky.starOpacity <= 0) {
+                return;
+            }
+
+            stars.forEach((star) => {
+                const pulse = 0.45 + 0.55 * ((Math.sin(world.time * 1.8 + star.twinkle) + 1) / 2);
+                const alpha = sky.starOpacity * pulse * 0.9;
+                ctx.fillStyle = `rgba(255,255,245,${alpha})`;
+                ctx.beginPath();
+                ctx.arc(canvas.width * star.x, canvas.height * (0.03 + star.y * 0.72), star.size * getScaleX(), 0, Math.PI * 2);
+                ctx.fill();
+            });
         }
 
         function drawCloud(x, y, scale, alpha) {
@@ -667,13 +749,33 @@
             ctx.fillStyle = skyGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height * 0.28);
 
-            ctx.fillStyle = `rgba(255, 230, 150, ${0.18 + (1 - sky.cycle) * 0.35})`;
-            ctx.beginPath();
-            ctx.arc(canvas.width * 0.82, canvas.height * 0.1, 34 + sky.cycle * 10, 0, Math.PI * 2);
-            ctx.fill();
+            drawStars(sky);
+
+            if (sky.sunStrength > 0.04 || sky.sunsetStrength > 0.1) {
+                ctx.fillStyle = `rgba(255, 236, 168, ${0.16 + sky.sunStrength * 0.32 + sky.sunsetStrength * 0.12})`;
+                ctx.beginPath();
+                ctx.arc(canvas.width * 0.82, canvas.height * 0.1, 24 + sky.sunStrength * 18 + sky.sunsetStrength * 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            if (sky.sunsetStrength > 0.08) {
+                const sunsetGlow = ctx.createRadialGradient(
+                    canvas.width * 0.8,
+                    canvas.height * 0.12,
+                    10,
+                    canvas.width * 0.8,
+                    canvas.height * 0.12,
+                    canvas.width * 0.18
+                );
+                sunsetGlow.addColorStop(0, `rgba(255, 171, 84, ${0.22 * sky.sunsetStrength})`);
+                sunsetGlow.addColorStop(1, "rgba(255, 171, 84, 0)");
+                ctx.fillStyle = sunsetGlow;
+                ctx.fillRect(canvas.width * 0.6, 0, canvas.width * 0.32, canvas.height * 0.28);
+            }
 
             clouds.forEach((cloud) => {
-                drawCloud(cloud.x, cloud.y, cloud.scale, cloud.alpha + sky.cycle * 0.06);
+                const cloudAlpha = cloud.alpha * (1 - sky.starOpacity * 0.55) + sky.sunsetStrength * 0.08;
+                drawCloud(cloud.x, cloud.y, cloud.scale, cloudAlpha);
             });
         }
 
@@ -703,32 +805,22 @@
             ctx.closePath();
             ctx.fill();
 
-            ctx.fillStyle = "rgba(255,255,255,0.035)";
-            for (let i = 0; i < 16; i += 1) {
-                const t = ((i * 180 + world.roadOffset * 0.45) % 2200) / 2200;
-                const y = horizonY + t * (canvas.height - horizonY);
-                const width = 10 + t * 22;
-                const height = 2 + t * 4;
-                ctx.fillRect(centerX - roadBottomWidth * 0.24, y, width, height);
-                ctx.fillRect(centerX + roadBottomWidth * 0.18, y, width, height);
-            }
-
             ctx.fillStyle = "#e7ebf5";
-            for (let i = 0; i < 18; i += 1) {
-                const t = ((i * 160 + world.roadOffset) % 2200) / 2200;
+            for (let i = 0; i < 12; i += 1) {
+                const t = ((i * 240 + world.roadOffset) % 2200) / 2200;
                 const y = horizonY + t * (canvas.height - horizonY);
                 const width = 6 + t * 12;
-                const height = 14 + t * 34;
+                const height = 10 + t * 16;
                 ctx.fillRect(centerX - width / 2, y, width, height);
             }
 
-            ctx.strokeStyle = "#f7fafc";
-            ctx.lineWidth = 5;
+            ctx.strokeStyle = "rgba(38, 42, 50, 0.9)";
+            ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(centerX - roadTopWidth / 2, horizonY);
-            ctx.lineTo(centerX - roadBottomWidth / 2, canvas.height);
-            ctx.moveTo(centerX + roadTopWidth / 2, horizonY);
-            ctx.lineTo(centerX + roadBottomWidth / 2, canvas.height);
+            ctx.moveTo(centerX - roadTopWidth / 2 + 2, horizonY);
+            ctx.lineTo(centerX - roadBottomWidth / 2 + 4, canvas.height);
+            ctx.moveTo(centerX + roadTopWidth / 2 - 2, horizonY);
+            ctx.lineTo(centerX + roadBottomWidth / 2 - 4, canvas.height);
             ctx.stroke();
 
             ctx.fillStyle = "#d8b36a";
