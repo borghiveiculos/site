@@ -122,6 +122,33 @@
             touch-action: none;
         }
 
+        .touch-controls {
+            display: none;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .touch-btn {
+            min-width: 84px;
+            min-height: 54px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(7, 10, 16, 0.72);
+            color: #f8fafc;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .touch-btn:active,
+        .touch-btn.active {
+            transform: translateY(1px) scale(0.98);
+        }
+
         .game-hud {
             display: flex;
             align-items: start;
@@ -217,6 +244,50 @@
             width: 22px;
             height: 22px;
             fill: currentColor;
+        }
+
+        @media (max-width: 780px) {
+            .shell {
+                width: min(100%, calc(100% - 12px));
+                padding: 12px 0 20px;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .game-card {
+                padding: 10px;
+                width: min(100%, 100%);
+            }
+
+            canvas {
+                max-width: 100%;
+            }
+
+            .game-hud {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hud-stack {
+                width: 100%;
+            }
+
+            .hud-box {
+                min-width: 0;
+                flex: 1 1 140px;
+            }
+
+            .fullscreen-btn {
+                align-self: center;
+            }
+
+            .touch-controls {
+                display: flex;
+            }
         }
 
         .overlay {
@@ -316,6 +387,10 @@
                         </svg>
                     </button>
                 </div>
+                <div class="touch-controls" aria-label="Controles na tela">
+                    <button class="touch-btn" data-touch="left" type="button">Esquerda</button>
+                    <button class="touch-btn" data-touch="right" type="button">Direita</button>
+                </div>
         </section>
 
     </div>
@@ -330,6 +405,8 @@
         const speedEl = document.getElementById("speed");
         const fullscreenBtn = document.getElementById("fullscreen-btn");
         const levelCityEl = document.getElementById("level-city");
+        const touchButtons = document.querySelectorAll(".touch-btn");
+        const gameCard = document.querySelector(".game-card");
 
         const playerImage = new Image();
         playerImage.src = "gol-traseira.png";
@@ -383,13 +460,14 @@
             x: 0.5,
             targetX: 0.5,
             y: 0.83,
-            width: 168,
-            height: 246,
+            width: 0,
+            height: 0,
             crashTilt: 0
         };
 
         const obstacles = [];
         const lanePositions = [0.29, 0.5, 0.71];
+        const baseCanvas = { width: 1280, height: 1024 };
         const levels = [
             { city: "Nova Alianca", label: "Nivel 1", min: 0, max: 10 },
             { city: "Bady Bassitt", label: "Nivel 2", min: 11, max: 20 },
@@ -400,6 +478,41 @@
             { city: "Bahia", label: "Nivel 7", min: 61, max: 70 },
             { city: "Borghi Veiculos", label: "Nivel 8", min: 71, max: Infinity }
         ];
+
+        function getScaleX() {
+            return canvas.width / baseCanvas.width;
+        }
+
+        function getScaleY() {
+            return canvas.height / baseCanvas.height;
+        }
+
+        function updateCanvasSize() {
+            const isFullscreen = document.fullscreenElement === gameCard;
+            const isMobile = window.innerWidth <= 780;
+
+            if (isFullscreen) {
+                canvas.width = 1920;
+                canvas.height = 1080;
+            } else if (isMobile) {
+                canvas.width = 720;
+                canvas.height = 940;
+            } else {
+                canvas.width = 1280;
+                canvas.height = 1024;
+            }
+
+            player.width = 168 * getScaleX();
+            player.height = 246 * getScaleY();
+        }
+
+        function getDisplaySpeed() {
+            const raw = getSpeed();
+            const minRaw = 2.8;
+            const maxRaw = 24;
+            const normalized = Math.max(0, Math.min(1, (raw - minRaw) / (maxRaw - minRaw)));
+            return Math.round(80 + normalized * 220);
+        }
 
         function resetGame() {
             world.running = true;
@@ -441,7 +554,7 @@
         }
 
         function updateHud() {
-            const speed = Math.round(getSpeed() * 12);
+            const speed = getDisplaySpeed();
             const level = levels.find((item) => world.passes >= item.min && world.passes <= item.max) || levels[levels.length - 1];
 
             scoreEl.textContent = `${Math.floor(world.score)} km`;
@@ -460,8 +573,8 @@
                     lane,
                     x: lanePositions[lane],
                     y: 0.12,
-                    width: 130 + Math.random() * 22,
-                    height: 68 + Math.random() * 14,
+                    width: (130 + Math.random() * 22) * getScaleX(),
+                    height: (68 + Math.random() * 14) * getScaleY(),
                     speedFactor: 0.88 + Math.random() * 0.22,
                     image: potholeImage,
                     passed: false
@@ -476,8 +589,8 @@
                 lane,
                 x: lanePositions[lane],
                 y: 0.1,
-                width: 128 + Math.random() * 18,
-                height: 186 + Math.random() * 20,
+                width: (128 + Math.random() * 18) * getScaleX(),
+                height: (186 + Math.random() * 20) * getScaleY(),
                 speedFactor: 0.72 + Math.random() * 0.36,
                 image: vehicleSprite.image,
                 passed: false
@@ -840,10 +953,36 @@
                 return;
             }
 
-            await document.querySelector(".game-card").requestFullscreen();
+            await gameCard.requestFullscreen();
+        });
+
+        document.addEventListener("fullscreenchange", () => {
+            updateCanvasSize();
+            render();
+        });
+
+        window.addEventListener("resize", () => {
+            updateCanvasSize();
+            render();
+        });
+
+        touchButtons.forEach((button) => {
+            const action = button.dataset.touch;
+            button.addEventListener("pointerdown", () => {
+                button.classList.add("active");
+                setAction(action, true);
+            });
+            const clear = () => {
+                button.classList.remove("active");
+                setAction(action, false);
+            };
+            button.addEventListener("pointerup", clear);
+            button.addEventListener("pointerleave", clear);
+            button.addEventListener("pointercancel", clear);
         });
 
         playerImage.addEventListener("load", render);
+        updateCanvasSize();
         render();
         requestAnimationFrame(loop);
     </script>
