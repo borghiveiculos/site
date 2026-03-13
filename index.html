@@ -147,6 +147,33 @@
             }
         }
 
+        @keyframes heroGlow {
+            0% {
+                text-shadow:
+                    0 0 8px rgba(255, 255, 255, 0.28),
+                    0 0 16px rgba(255, 255, 255, 0.18),
+                    0 0 24px color-mix(in srgb, var(--primary) 48%, transparent),
+                    0 0 40px color-mix(in srgb, var(--primary) 22%, transparent);
+                filter: saturate(1) brightness(1);
+            }
+            50% {
+                text-shadow:
+                    0 0 12px rgba(255, 255, 255, 0.54),
+                    0 0 22px rgba(255, 255, 255, 0.3),
+                    0 0 38px color-mix(in srgb, var(--primary) 90%, transparent),
+                    0 0 58px color-mix(in srgb, var(--primary) 55%, transparent);
+                filter: saturate(1.18) brightness(1.08);
+            }
+            100% {
+                text-shadow:
+                    0 0 10px rgba(255, 255, 255, 0.42),
+                    0 0 18px rgba(255, 255, 255, 0.24),
+                    0 0 30px color-mix(in srgb, var(--primary) 72%, transparent),
+                    0 0 52px color-mix(in srgb, var(--primary) 42%, transparent);
+                filter: saturate(1.1) brightness(1.04);
+            }
+        }
+
         @keyframes drift {
             0%, 100% {
                 transform: translateY(0);
@@ -362,6 +389,17 @@
             max-width: none;
             white-space: nowrap;
             margin-bottom: 12px;
+            position: relative;
+            transition: transform 0.35s ease, letter-spacing 0.35s ease, text-shadow 0.35s ease, color 0.35s ease, filter 0.35s ease;
+            cursor: default;
+        }
+
+        .hero h1:hover {
+            transform: translateY(-4px) scale(1.045);
+            letter-spacing: 0.075em;
+            color: var(--primary);
+            filter: saturate(1.15) brightness(1.08);
+            animation: heroGlow 0.9s ease-in-out infinite alternate;
         }
 
         .hero p {
@@ -379,10 +417,12 @@
             display: inline-flex;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
             gap: 12px;
             row-gap: 8px;
             color: var(--hero-subtext);
-            font-size: 1rem;
+            font-size: 0.96rem;
+            text-align: center;
         }
 
         .services-line strong {
@@ -393,6 +433,17 @@
 
         .services-line span {
             color: var(--hero-subtext);
+            font-size: 0.96rem;
+        }
+
+        .services-line strong,
+        .services-line span,
+        .footer-card p,
+        .footer-card a,
+        .footer-meta,
+        .footer-note {
+            overflow-wrap: anywhere;
+            word-break: normal;
         }
 
         .services-line .dot {
@@ -587,10 +638,19 @@
             text-align: center;
         }
 
+        .footer-card--cnpj {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100%;
+        }
+
         .footer-card h3,
         .footer-card h4 {
             margin-bottom: 14px;
             text-transform: uppercase;
+            font-size: 1.08rem;
         }
 
         .footer-card p,
@@ -645,6 +705,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            width: 100%;
         }
 
         .map-wrap {
@@ -763,15 +824,53 @@
                 padding: 26px;
             }
 
-            .cta-row {
-                flex-direction: column;
-            }
-
-            .btn {
+            .hero-copy {
                 width: 100%;
             }
 
             .hero h1 {
+                font-size: clamp(1.08rem, 7.2vw, 1.7rem);
+                line-height: 1.02;
+                text-wrap: balance;
+                text-align: center;
+            }
+
+            .services-row {
+                margin: 18px 0 24px;
+                width: 100%;
+            }
+
+            .services-line {
+                display: grid;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 6px;
+                font-size: 0.92rem;
+            }
+
+            .services-line strong,
+            .services-line span {
+                font-size: 0.92rem;
+            }
+
+            .services-line .dot {
+                display: none;
+            }
+
+            .cta-row {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                min-height: 50px;
+                padding: 13px 16px;
+                font-size: 0.84rem;
+            }
+
+            .hero h1,
+            .footer-meta {
                 white-space: normal;
             }
 
@@ -779,8 +878,136 @@
                 right: 0;
             }
 
+            .instagram-section {
+                padding: 18px;
+            }
+
+            .instagram-shell {
+                min-height: 420px;
+            }
+
             footer.site-footer {
                 padding: 22px;
+            }
+
+            .footer-card {
+                padding: 20px 18px;
+            }
+
+            .footer-card--cnpj {
+                min-height: auto;
+            }
+
+            .footer-card h3,
+            .footer-card h4 {
+                font-size: 1rem;
+            }
+
+            .footer-card p,
+            .footer-card a {
+                font-size: 0.96rem;
+            }
+
+            .footer-note {
+                font-size: 0.88rem;
+                padding: 9px 12px;
+            }
+
+            .footer-card-car {
+                margin-top: 22px;
+                min-height: 110px;
+                align-items: flex-end;
+            }
+
+            .footer-car {
+                width: min(210px, 68vw);
+            }
+
+            .footer-bottom {
+                margin-top: 22px;
+                padding-top: 18px;
+            }
+
+            .footer-meta {
+                font-size: 0.9rem;
+                line-height: 1.55;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 10px 0;
+            }
+
+            .brand img {
+                width: clamp(118px, 34vw, 152px);
+            }
+
+            .theme-toggle {
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+            }
+
+            .theme-toggle img {
+                width: 36px;
+                height: 36px;
+            }
+
+            main {
+                padding: 20px 0 42px;
+            }
+
+            .hero {
+                border-radius: 22px;
+                padding: 20px 16px;
+            }
+
+            .hero h1 {
+                font-size: clamp(0.98rem, 7vw, 1.38rem);
+                letter-spacing: 0.03em;
+            }
+
+            .services-line,
+            .services-line strong,
+            .services-line span {
+                font-size: 0.86rem;
+            }
+
+            .btn {
+                font-size: 0.79rem;
+            }
+
+            .instagram-section,
+            footer.site-footer {
+                border-radius: 22px;
+            }
+
+            .instagram-shell {
+                min-height: 360px;
+            }
+
+            .footer-card p,
+            .footer-card a,
+            .footer-meta {
+                font-size: 0.88rem;
+            }
+
+            .footer-note {
+                max-width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .footer-card-car {
+                margin-top: 16px;
+                min-height: 92px;
+            }
+
+            .footer-car {
+                width: min(176px, 64vw);
             }
         }
     </style>
@@ -848,7 +1075,7 @@
 
         <footer class="site-footer">
             <div class="footer-grid">
-                <section class="footer-card">
+                <section class="footer-card footer-card--cnpj">
                     <h3>Borghi Veículos</h3>
                     <span class="footer-note">CNPJ: 60.233.480/0001-62</span>
                     <a href="game.html" class="footer-car-link footer-card-car" aria-label="Abrir jogo Gol Corrida">
@@ -880,7 +1107,7 @@
                     <p>Nova Aliança, Brazil - 15210-000</p>
 
                     <div class="map-wrap">
-                        <iframe src="https://maps.google.com/maps?q=Rua%20do%20Com%C3%A9rcio,%20120,%20Nova%20Alian%C3%A7a,%20Brasil&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://maps.google.com/maps?q=Rua%20do%20Com%C3%A9rcio,%20120,%20Nova%20Alian%C3%A7a,%20Brasil&t=k&z=18&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
                     </div>
 
                     <a href="https://maps.google.com/?q=Rua+do+Comercio,+120,+Nova+Alianca,+SP,+Brasil" target="_blank" rel="noopener noreferrer" class="btn btn-map">
