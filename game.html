@@ -112,10 +112,15 @@
             margin: 0 auto;
         }
 
-        canvas {
+        .canvas-wrap {
+            position: relative;
             width: 100%;
             max-width: 940px;
             margin: 0 auto;
+        }
+
+        canvas {
+            width: 100%;
             aspect-ratio: 1280 / 1024;
             display: block;
             border-radius: 22px;
@@ -137,7 +142,9 @@
             background: rgba(7, 10, 16, 0.72);
             color: #f8fafc;
             font-family: "Space Grotesk", sans-serif;
-            font-size: 0.95rem;
+            font-size: 1.45rem;
+            font-weight: 700;
+            line-height: 1;
             cursor: pointer;
             backdrop-filter: blur(10px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
@@ -165,7 +172,6 @@
             flex-wrap: wrap;
         }
 
-        .hud-box,
         .fullscreen-btn {
             border: 1px solid rgba(255, 255, 255, 0.14);
             background: rgba(7, 10, 16, 0.62);
@@ -176,9 +182,13 @@
 
         .hud-box {
             min-width: 120px;
-            padding: 10px 12px;
-            border-radius: 18px;
+            padding: 0;
             pointer-events: auto;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+            text-align: center;
         }
 
         .hud-box span {
@@ -198,8 +208,7 @@
 
         .hud-box {
             min-width: 116px;
-            padding: 10px 12px;
-            border-radius: 18px;
+            padding: 0;
         }
 
         .hud-box span {
@@ -294,18 +303,24 @@
             position: absolute;
             inset: 16px;
             border-radius: 22px;
-            background: linear-gradient(180deg, rgba(5, 7, 12, 0.2), rgba(5, 7, 12, 0.82));
+            background: linear-gradient(180deg, rgba(5, 7, 12, 0.24), rgba(5, 7, 12, 0.84));
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 24px;
+            padding: 20px;
             transition: opacity 0.25s ease;
         }
 
         .overlay.hidden {
             opacity: 0;
             pointer-events: none;
+        }
+
+        .overlay-box {
+            width: 100%;
+            max-width: 460px;
+            padding: 0;
         }
 
         .overlay-box h2 {
@@ -340,6 +355,30 @@
             box-shadow: 0 16px 34px rgba(224, 25, 39, 0.32);
         }
 
+        @media (max-width: 780px) {
+            .overlay {
+                inset: 10px;
+                padding: 14px 10px;
+            }
+
+            .overlay-box h2 {
+                font-size: clamp(1.2rem, 6vw, 1.6rem);
+            }
+
+            .overlay-box p {
+                font-size: 0.94rem;
+            }
+
+            .overlay-box {
+                max-width: min(100%, 360px);
+                padding: 0;
+            }
+
+            .start-btn {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -353,6 +392,7 @@
         </div>
 
         <section class="game-card">
+                <div class="canvas-wrap">
                 <canvas id="gameCanvas" width="1280" height="1024" aria-label="Jogo Gol do Petrus"></canvas>
                 <div class="overlay" id="overlay">
                     <div class="overlay-box">
@@ -361,6 +401,7 @@
                         <p>Desvie dos carros, ultrapasse o transito e acelere cada vez mais.</p>
                         <button class="start-btn" id="startButton" type="button">Iniciar corrida</button>
                     </div>
+                </div>
                 </div>
                 <div class="game-hud">
                     <div class="hud-stack">
@@ -388,8 +429,8 @@
                     </button>
                 </div>
                 <div class="touch-controls" aria-label="Controles na tela">
-                    <button class="touch-btn" data-touch="left" type="button">Esquerda</button>
-                    <button class="touch-btn" data-touch="right" type="button">Direita</button>
+                    <button class="touch-btn" data-touch="left" type="button" aria-label="Mover para a esquerda">&#8592;</button>
+                    <button class="touch-btn" data-touch="right" type="button" aria-label="Mover para a direita">&#8594;</button>
                 </div>
         </section>
 
@@ -468,6 +509,7 @@
         const obstacles = [];
         const lanePositions = [0.29, 0.5, 0.71];
         const baseCanvas = { width: 1280, height: 1024 };
+        const initialSpawnDelay = 3;
         const levels = [
             { city: "Nova Alianca", label: "Nivel 1", min: 0, max: 10 },
             { city: "Bady Bassitt", label: "Nivel 2", min: 11, max: 20 },
@@ -529,10 +571,6 @@
             player.x = lanePositions[player.lane];
             player.targetX = lanePositions[player.lane];
             player.crashTilt = 0;
-            spawnObstacle();
-            spawnObstacle();
-            if (obstacles[0]) obstacles[0].y = 0.22;
-            if (obstacles[1]) obstacles[1].y = 0.04;
             updateHud();
             overlay.classList.add("hidden");
             render();
@@ -868,7 +906,7 @@
             player.crashTilt *= 0.86;
 
             const spawnInterval = Math.max(0.58, 1.5 - world.distance * 0.012);
-            if (world.spawnTimer >= spawnInterval) {
+            if (world.time >= initialSpawnDelay && world.spawnTimer >= spawnInterval) {
                 spawnObstacle();
                 world.spawnTimer = 0;
             }
