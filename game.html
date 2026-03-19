@@ -350,6 +350,13 @@
             margin-bottom: 18px;
         }
 
+        .overlay-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .start-btn {
             min-height: 52px;
             padding: 14px 24px;
@@ -361,6 +368,65 @@
             font-size: 1rem;
             cursor: pointer;
             box-shadow: 0 16px 34px rgba(224, 25, 39, 0.32);
+        }
+
+        .share-btn {
+            min-height: 52px;
+            padding: 14px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 18px;
+            background: rgba(7, 10, 16, 0.72);
+            color: #ffffff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .share-btn.visible {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-board {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(7, 10, 16, 0.52);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .score-board h3 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(248, 250, 252, 0.82);
+            margin-bottom: 8px;
+        }
+
+        .best-score {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .recent-scores {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            color: #d6dbe6;
+            font-size: 0.9rem;
+        }
+
+        .recent-scores li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 780px) {
@@ -397,10 +463,26 @@
                 font-size: 0.92rem;
             }
 
+            .share-btn {
+                width: 100%;
+                min-height: 46px;
+                padding: 12px 16px;
+                font-size: 0.92rem;
+            }
+
             .touch-btn {
                 min-width: 108px;
                 min-height: 64px;
                 font-size: 1.7rem;
+            }
+
+            .score-board {
+                margin-top: 14px;
+                padding: 12px;
+            }
+
+            .recent-scores {
+                font-size: 0.82rem;
             }
         }
 
@@ -423,8 +505,19 @@
                     <div class="overlay-box">
                         <img src="gol.png" alt="Gol de abertura" class="cover-car">
                         <h2>Gol do Petrus</h2>
-                        <p>Desvie dos carros, ultrapasse o transito e acelere cada vez mais.</p>
-                        <button class="start-btn" id="startButton" type="button">Iniciar corrida</button>
+                        <p id="overlay-message">Desvie dos carros, ultrapasse o transito e acelere cada vez mais.</p>
+                        <div class="overlay-actions">
+                            <button class="start-btn" id="startButton" type="button">Iniciar corrida</button>
+                            <button class="share-btn" id="shareButton" type="button">Compartilhar pontos</button>
+                        </div>
+                        <div class="score-board">
+                            <h3>Recorde</h3>
+                            <div class="best-score" id="bestScore">0 pontos</div>
+                            <h3>Ultimas pontuacoes</h3>
+                            <ul class="recent-scores" id="recentScores">
+                                <li>Nenhuma corrida registrada ainda.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -465,12 +558,16 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const overlay = document.getElementById("overlay");
+        const overlayMessage = document.getElementById("overlay-message");
         const startButton = document.getElementById("startButton");
+        const shareButton = document.getElementById("shareButton");
         const scoreEl = document.getElementById("score");
         const passesEl = document.getElementById("passes");
         const speedEl = document.getElementById("speed");
         const fullscreenBtn = document.getElementById("fullscreen-btn");
         const levelCityEl = document.getElementById("level-city");
+        const bestScoreEl = document.getElementById("bestScore");
+        const recentScoresEl = document.getElementById("recentScores");
         const touchButtons = document.querySelectorAll(".touch-btn");
         const gameCard = document.querySelector(".game-card");
 
@@ -495,6 +592,13 @@
 
         const potholeImage = new Image();
         potholeImage.src = "buraco.png";
+        const logoImage = new Image();
+        logoImage.src = "logo-BV.png";
+
+        const storageKeys = {
+            best: "gol-do-petrus-best-score",
+            recent: "gol-do-petrus-recent-scores"
+        };
 
         const world = {
             running: false,
@@ -507,6 +611,8 @@
             lastTime: 0,
             enemySeed: 0
         };
+        let crashSnapshotDataUrl = "";
+        let crashScoreSaved = false;
 
         const clouds = [
             { x: 180, y: 96, scale: 1.2, speed: 14, alpha: 0.46 },
@@ -594,6 +700,145 @@
             return Math.round(80 + normalized * 220);
         }
 
+        function getStoredBestScore() {
+            return Number(localStorage.getItem(storageKeys.best) || 0);
+        }
+
+        function getStoredRecentScores() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem(storageKeys.recent) || "[]");
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function renderScoreHistory() {
+            const bestScore = getStoredBestScore();
+            const recentScores = getStoredRecentScores();
+
+            bestScoreEl.textContent = `${bestScore} pontos`;
+
+            if (!recentScores.length) {
+                recentScoresEl.innerHTML = "<li>Nenhuma corrida registrada ainda.</li>";
+                return;
+            }
+
+            recentScoresEl.innerHTML = recentScores
+                .map((entry) => `<li><span>${entry.score} pts</span><span>${entry.passes} carros</span></li>`)
+                .join("");
+        }
+
+        function saveScoreHistory() {
+            const score = Math.floor(world.score);
+            const passes = world.passes;
+            const bestScore = Math.max(getStoredBestScore(), score);
+            const recentScores = getStoredRecentScores();
+
+            localStorage.setItem(storageKeys.best, String(bestScore));
+            recentScores.unshift({ score, passes });
+            localStorage.setItem(storageKeys.recent, JSON.stringify(recentScores.slice(0, 5)));
+            renderScoreHistory();
+        }
+
+        function setOverlayState(title, message, showShare = false) {
+            overlay.querySelector("h2").textContent = title;
+            overlayMessage.textContent = message;
+            shareButton.classList.toggle("visible", showShare);
+        }
+
+        function captureCrashSnapshot() {
+            try {
+                crashSnapshotDataUrl = canvas.toDataURL("image/png");
+            } catch (error) {
+                crashSnapshotDataUrl = "";
+            }
+        }
+
+        async function buildShareImageBlob() {
+            const shareCanvas = document.createElement("canvas");
+            shareCanvas.width = 1280;
+            shareCanvas.height = 1600;
+            const shareCtx = shareCanvas.getContext("2d");
+
+            shareCtx.fillStyle = "#070b12";
+            shareCtx.fillRect(0, 0, shareCanvas.width, shareCanvas.height);
+
+            shareCtx.fillStyle = "#d71920";
+            shareCtx.fillRect(0, 0, shareCanvas.width, 26);
+
+            if (crashSnapshotDataUrl) {
+                const snapshot = new Image();
+                await new Promise((resolve, reject) => {
+                    snapshot.onload = resolve;
+                    snapshot.onerror = reject;
+                    snapshot.src = crashSnapshotDataUrl;
+                });
+
+                shareCtx.drawImage(snapshot, 70, 90, 1140, 912);
+            }
+
+            shareCtx.fillStyle = "rgba(7, 11, 18, 0.9)";
+            shareCtx.fillRect(0, 1030, shareCanvas.width, 570);
+
+            if (logoImage.complete && logoImage.naturalWidth > 0) {
+                shareCtx.drawImage(logoImage, 80, 1080, 300, 140);
+            }
+
+            shareCtx.fillStyle = "#ffffff";
+            shareCtx.font = '700 60px "Orbitron", sans-serif';
+            shareCtx.fillText("Gol do Petrus", 80, 1280);
+
+            shareCtx.fillStyle = "#f0f4fb";
+            shareCtx.font = '700 72px "Space Grotesk", sans-serif';
+            shareCtx.fillText(`${Math.floor(world.score)} pontos`, 80, 1370);
+
+            shareCtx.fillStyle = "#d1d8e5";
+            shareCtx.font = '500 38px "Manrope", sans-serif';
+            shareCtx.fillText(`Ultrapassagens: ${world.passes} carros`, 80, 1435);
+            shareCtx.fillText("Visite Borghi Veiculos e conheca o site.", 80, 1500);
+            shareCtx.fillText("borghiveiculos", 80, 1550);
+
+            return await new Promise((resolve) => {
+                shareCanvas.toBlob((blob) => resolve(blob), "image/png");
+            });
+        }
+
+        async function shareScore() {
+            if (!crashSnapshotDataUrl) {
+                return;
+            }
+
+            const text = `Eu fiz ${Math.floor(world.score)} pontos no Gol do Petrus e passei ${world.passes} carros. Visite o site da Borghi Veiculos.`;
+
+            try {
+                const blob = await buildShareImageBlob();
+                if (!blob) {
+                    throw new Error("Nao foi possivel gerar a imagem de compartilhamento.");
+                }
+
+                const file = new File([blob], "gol-do-petrus.png", { type: "image/png" });
+                if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+                    await navigator.share({
+                        title: "Gol do Petrus",
+                        text,
+                        files: [file]
+                    });
+                    return;
+                }
+
+                const downloadUrl = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = downloadUrl;
+                link.download = "gol-do-petrus.png";
+                link.click();
+                URL.revokeObjectURL(downloadUrl);
+                window.alert("Imagem gerada. Ela foi baixada para voce compartilhar com seus pontos.");
+            } catch (error) {
+                window.alert("Nao foi possivel compartilhar agora.");
+            }
+        }
+
         function resetGame() {
             world.running = true;
             world.score = 0;
@@ -605,21 +850,39 @@
             world.lastTime = performance.now();
             world.enemySeed = 0;
             obstacles.length = 0;
+            crashSnapshotDataUrl = "";
+            crashScoreSaved = false;
             player.lane = 1;
             player.x = lanePositions[player.lane];
             player.targetX = lanePositions[player.lane];
             player.crashTilt = 0;
             updateHud();
+            setOverlayState("Gol do Petrus", "Desvie dos carros, ultrapasse o transito e acelere cada vez mais.");
             overlay.classList.add("hidden");
             render();
         }
 
         function endGame() {
+            if (!world.running) {
+                return;
+            }
+
             world.running = false;
+            render();
+            captureCrashSnapshot();
+
+            if (!crashScoreSaved) {
+                saveScoreHistory();
+                crashScoreSaved = true;
+            }
+
             startButton.textContent = "Jogar novamente";
             overlay.classList.remove("hidden");
-            overlay.querySelector("h2").textContent = "Fim de corrida";
-            overlay.querySelector("p").textContent = `Voce fez ${world.passes} ultrapassagens e ${Math.floor(world.score)} pontos.`;
+            setOverlayState(
+                "Fim de corrida",
+                `Voce fez ${world.passes} ultrapassagens e ${Math.floor(world.score)} pontos.`,
+                true
+            );
         }
 
         function getSpeed() {
@@ -1071,10 +1334,12 @@
         });
 
         startButton.addEventListener("click", () => {
-            overlay.querySelector("h2").textContent = "Gol do Petrus";
-            overlay.querySelector("p").textContent = "Desvie dos carros, ultrapasse o transito e acelere cada vez mais.";
             startButton.textContent = "Reiniciar corrida";
             resetGame();
+        });
+
+        shareButton.addEventListener("click", () => {
+            shareScore();
         });
 
         fullscreenBtn.addEventListener("click", async () => {
@@ -1112,6 +1377,8 @@
         });
 
         playerImage.addEventListener("load", render);
+        renderScoreHistory();
+        setOverlayState("Gol do Petrus", "Desvie dos carros, ultrapasse o transito e acelere cada vez mais.");
         updateCanvasSize();
         render();
         requestAnimationFrame(loop);
