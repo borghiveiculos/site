@@ -432,42 +432,47 @@
         @media (max-width: 780px) {
             .overlay {
                 inset: 10px;
-                padding: 14px 10px;
+                padding: 10px 8px;
+                overflow-y: auto;
             }
 
             .cover-car {
-                width: min(152px, 42vw);
-                margin-bottom: 12px;
+                width: min(118px, 34vw);
+                margin-bottom: 8px;
             }
 
             .overlay-box h2 {
-                font-size: clamp(1.05rem, 5vw, 1.35rem);
-                margin-bottom: 6px;
+                font-size: clamp(0.96rem, 4.7vw, 1.2rem);
+                margin-bottom: 4px;
             }
 
             .overlay-box p {
-                font-size: 0.82rem;
-                line-height: 1.35;
-                margin-bottom: 12px;
+                font-size: 0.74rem;
+                line-height: 1.28;
+                margin-bottom: 8px;
             }
 
             .overlay-box {
-                max-width: min(100%, 300px);
+                max-width: min(100%, 280px);
                 padding: 0;
+            }
+
+            .overlay-actions {
+                gap: 8px;
             }
 
             .start-btn {
                 width: 100%;
-                min-height: 46px;
-                padding: 12px 16px;
-                font-size: 0.92rem;
+                min-height: 40px;
+                padding: 10px 12px;
+                font-size: 0.82rem;
             }
 
             .share-btn {
                 width: 100%;
-                min-height: 46px;
-                padding: 12px 16px;
-                font-size: 0.92rem;
+                min-height: 40px;
+                padding: 10px 12px;
+                font-size: 0.82rem;
             }
 
             .touch-btn {
@@ -477,12 +482,23 @@
             }
 
             .score-board {
-                margin-top: 14px;
-                padding: 12px;
+                margin-top: 10px;
+                padding: 10px;
+            }
+
+            .score-board h3 {
+                font-size: 0.72rem;
+                margin-bottom: 5px;
+            }
+
+            .best-score {
+                font-size: 0.84rem;
+                margin-bottom: 8px;
             }
 
             .recent-scores {
-                font-size: 0.82rem;
+                font-size: 0.74rem;
+                gap: 4px;
             }
         }
 
@@ -781,23 +797,25 @@
             shareCtx.fillStyle = "rgba(7, 11, 18, 0.9)";
             shareCtx.fillRect(0, 1030, shareCanvas.width, 570);
 
+            shareCtx.textAlign = "center";
+
             if (logoImage.complete && logoImage.naturalWidth > 0) {
-                shareCtx.drawImage(logoImage, 80, 1080, 300, 140);
+                shareCtx.drawImage(logoImage, shareCanvas.width / 2 - 150, 1070, 300, 140);
             }
 
             shareCtx.fillStyle = "#ffffff";
             shareCtx.font = '700 60px "Orbitron", sans-serif';
-            shareCtx.fillText("Gol do Petrus", 80, 1280);
+            shareCtx.fillText("Gol do Petrus", shareCanvas.width / 2, 1280);
 
             shareCtx.fillStyle = "#f0f4fb";
             shareCtx.font = '700 72px "Space Grotesk", sans-serif';
-            shareCtx.fillText(`${Math.floor(world.score)} pontos`, 80, 1370);
+            shareCtx.fillText(`${Math.floor(world.score)} pontos`, shareCanvas.width / 2, 1370);
 
             shareCtx.fillStyle = "#d1d8e5";
             shareCtx.font = '500 38px "Manrope", sans-serif';
-            shareCtx.fillText(`Ultrapassagens: ${world.passes} carros`, 80, 1435);
-            shareCtx.fillText("Visite Borghi Veiculos e conheca o site.", 80, 1500);
-            shareCtx.fillText("borghiveiculos", 80, 1550);
+            shareCtx.fillText(`Ultrapassagens: ${world.passes} carros`, shareCanvas.width / 2, 1435);
+            shareCtx.fillText("Visite Borghi Veiculos e conheca o site.", shareCanvas.width / 2, 1500);
+            shareCtx.fillText("borghiveiculos.github.io/site", shareCanvas.width / 2, 1550);
 
             return await new Promise((resolve) => {
                 shareCanvas.toBlob((blob) => resolve(blob), "image/png");
