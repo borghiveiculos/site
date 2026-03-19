@@ -431,48 +431,51 @@
 
         @media (max-width: 780px) {
             .overlay {
-                inset: 10px;
-                padding: 10px 8px;
+                inset: 8px;
+                align-items: flex-start;
+                padding: 8px 6px;
                 overflow-y: auto;
             }
 
             .cover-car {
-                width: min(118px, 34vw);
-                margin-bottom: 8px;
+                width: min(92px, 28vw);
+                margin-bottom: 6px;
             }
 
             .overlay-box h2 {
-                font-size: clamp(0.96rem, 4.7vw, 1.2rem);
-                margin-bottom: 4px;
+                font-size: clamp(0.86rem, 4.2vw, 1.05rem);
+                margin-bottom: 3px;
             }
 
             .overlay-box p {
-                font-size: 0.74rem;
-                line-height: 1.28;
-                margin-bottom: 8px;
+                font-size: 0.66rem;
+                line-height: 1.18;
+                margin-bottom: 6px;
             }
 
             .overlay-box {
-                max-width: min(100%, 280px);
+                max-width: min(100%, 252px);
                 padding: 0;
             }
 
             .overlay-actions {
-                gap: 8px;
+                gap: 6px;
             }
 
             .start-btn {
                 width: 100%;
-                min-height: 40px;
-                padding: 10px 12px;
-                font-size: 0.82rem;
+                min-height: 34px;
+                padding: 8px 10px;
+                font-size: 0.74rem;
+                border-radius: 14px;
             }
 
             .share-btn {
                 width: 100%;
-                min-height: 40px;
-                padding: 10px 12px;
-                font-size: 0.82rem;
+                min-height: 34px;
+                padding: 8px 10px;
+                font-size: 0.74rem;
+                border-radius: 14px;
             }
 
             .touch-btn {
@@ -482,23 +485,29 @@
             }
 
             .score-board {
-                margin-top: 10px;
-                padding: 10px;
+                margin-top: 8px;
+                padding: 8px;
+                border-radius: 14px;
             }
 
             .score-board h3 {
-                font-size: 0.72rem;
-                margin-bottom: 5px;
+                font-size: 0.62rem;
+                margin-bottom: 3px;
             }
 
             .best-score {
-                font-size: 0.84rem;
-                margin-bottom: 8px;
+                font-size: 0.74rem;
+                margin-bottom: 6px;
             }
 
             .recent-scores {
-                font-size: 0.74rem;
-                gap: 4px;
+                font-size: 0.66rem;
+                gap: 3px;
+            }
+
+            .recent-scores li {
+                gap: 8px;
+                flex-wrap: nowrap;
             }
         }
 
